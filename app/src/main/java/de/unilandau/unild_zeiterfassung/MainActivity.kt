@@ -9,7 +9,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
-
+//test
 
 class MainActivity : AppCompatActivity() {
 
