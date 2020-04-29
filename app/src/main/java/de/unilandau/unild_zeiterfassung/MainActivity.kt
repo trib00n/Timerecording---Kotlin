@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_main.*
 //asüdad
 
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var drawer: DrawerLayout
     lateinit var toolbar: Toolbar
 
-    public val fragmentManager = supportFragmentManager
+    private val fragmentManager = supportFragmentManager
     private val workFragment = WorkFragment()
     private val watchFragment = WatchFragment()
     private val settingsFragment = SettingsFragment()
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        var toggle = ActionBarDrawerToggle(
+        val toggle = ActionBarDrawerToggle(
             this,
             drawer,
             toolbar,
