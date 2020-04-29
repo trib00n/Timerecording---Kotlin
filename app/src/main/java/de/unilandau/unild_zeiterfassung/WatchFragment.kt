@@ -26,6 +26,7 @@ class WatchFragment : Fragment() {
     lateinit var v: View
 
     private val workFragment = WorkFragment()
+    private val dayFragment = DayFragment()
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -115,6 +116,10 @@ class WatchFragment : Fragment() {
                 pauseChronometer.stop()
                 Offset = SystemClock.elapsedRealtime() - chronometer.base
             pauseOffset = SystemClock.elapsedRealtime() - pauseChronometer.base
+
+            val fragmentTransaction = fragmentManager?.beginTransaction()
+            fragmentTransaction?.replace(R.id.fragment_container, dayFragment)
+            fragmentTransaction?.commit()
 
         }
 

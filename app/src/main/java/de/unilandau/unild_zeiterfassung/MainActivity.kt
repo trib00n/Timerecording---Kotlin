@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
     private val workFragment = WorkFragment()
     private val watchFragment = WatchFragment()
+    private val DayFragment = DayFragment()
     private val settingsFragment = SettingsFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
