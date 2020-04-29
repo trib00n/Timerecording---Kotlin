@@ -8,7 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_main.*
-
+//asüdad
 
 class MainActivity : AppCompatActivity() {
 
