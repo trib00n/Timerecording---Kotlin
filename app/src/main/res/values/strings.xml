@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">UNILD-Zeiterfassung</string>
+    <string name="einstellungen">Einstellungen</string>
+    <string name="arbeitstage">Arbeitstage</string>
+    <string name="erfassen">Erfassen</string>
+    <string name="hilfe">Hilfe</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>
