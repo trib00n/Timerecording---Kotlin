@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
 //test
+///aüsiodaüosidjasüidjasüdpjasüpd
 
 class MainActivity : AppCompatActivity() {
 
