@@ -1,32 +1,32 @@
 package de.unilandau.unild_zeiterfassung
 
-import android.icu.text.SimpleDateFormat
+import android.content.Context
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
-import android.icu.util.TimeUnit
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Chronometer
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_watch.view.*
+import java.security.AccessController.getContext
 import java.util.*
 
 
 class WatchFragment : Fragment() {
 
 
-    lateinit var chronometer : Chronometer
-    lateinit var pauseChronometer : Chronometer
+    lateinit var chronometer: Chronometer
+    lateinit var pauseChronometer: Chronometer
     lateinit var v: View
 
     private val workFragment = WorkFragment()
     private val dayFragment = DayFragment()
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
@@ -38,14 +38,15 @@ class WatchFragment : Fragment() {
         v = inflater.inflate(R.layout.fragment_watch, container, false)
 
 
-
-      //  val date = Calendar.getInstance().time
-      // val formatter = SimpleDateFormat.getDateTimeInstance() //or use getDateInstance()
-      //  val formatedDate = formatter.format(date)
+        //  val date = Calendar.getInstance().time
+        // val formatter = SimpleDateFormat.getDateTimeInstance() //or use getDateInstance()
+        //  val formatedDate = formatter.format(date)
         var running = false
         var firstRun = true
         var Offset: Long = 0
         var pauseOffset: Long = 0
+
+
 
         chronometer = v.findViewById(R.id.chronometer)
         pauseChronometer = v.findViewById(R.id.textViewPause)
@@ -66,7 +67,7 @@ class WatchFragment : Fragment() {
 
                     pauseChronometer.stop()
                     pauseOffset = SystemClock.elapsedRealtime() - pauseChronometer.base
-                   // v.textViewPause.text = "Pausen: $minutes Minuten $pause"
+                    // v.textViewPause.text = "Pausen: $minutes Minuten $pause"
                 }
                 v.startButton.visibility = View.INVISIBLE
                 v.workFragmentButton.visibility = View.INVISIBLE
@@ -111,11 +112,17 @@ class WatchFragment : Fragment() {
         }
 
         v.stopButton.setOnClickListener {
-
-                chronometer.stop()
-                pauseChronometer.stop()
-                Offset = SystemClock.elapsedRealtime() - chronometer.base
+            chronometer.stop()
+            pauseChronometer.stop()
+            Offset = SystemClock.elapsedRealtime() - chronometer.base
             pauseOffset = SystemClock.elapsedRealtime() - pauseChronometer.base
+
+            var timeRecording = TimeRecording(1, 2, 3, 4)
+
+            var db = DBHandler(v.context)
+
+            db.insertData(timeRecording)
+
 
             val fragmentTransaction = fragmentManager?.beginTransaction()
             fragmentTransaction?.replace(R.id.fragment_container, dayFragment)

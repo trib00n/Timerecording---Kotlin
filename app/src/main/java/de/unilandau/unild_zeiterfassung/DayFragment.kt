@@ -1,22 +1,14 @@
 package de.unilandau.unild_zeiterfassung
 
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
-import android.icu.util.GregorianCalendar
-import android.icu.util.TimeUnit
+
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Chronometer
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_watch.view.*
-import java.util.*
-
+import kotlinx.android.synthetic.main.fragment_day.view.*
 
 class DayFragment : Fragment() {
     lateinit var v: View
@@ -30,6 +22,17 @@ class DayFragment : Fragment() {
 
         v = inflater.inflate(R.layout.fragment_day, container, false)
 
+        v.editText.text=""
+
+        var db = DBHandler(v.context)
+        var data = db.readAllData()
+        for (i in 0..(data.size-1)){
+            v.editText.append(data.get(i).id.toString() + data.get(i).date.toString() +  data.get(i).begin.toString() + data.get(i).end.toString() + data.get(i).pause.toString() + "\n")
+        }
+
+        v.buttonDelete.setOnClickListener(){
+            db.deleteData(2)
+        }
 
         return v
     }

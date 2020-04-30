@@ -1,18 +1,19 @@
 package de.unilandau.unild_zeiterfassung
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_main.*
+
 //asüdad
 
 class MainActivity : AppCompatActivity() {
-
+    private val TAG = "MeinLog:"
 
     lateinit var drawer: DrawerLayout
     lateinit var toolbar: Toolbar
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val watchFragment = WatchFragment()
     private val DayFragment = DayFragment()
     private val settingsFragment = SettingsFragment()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, watchFragment)
         fragmentTransaction.commit()
+
+        // this.deleteDatabase("TimeRecordSystem")
 
 
 
