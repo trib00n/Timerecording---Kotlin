@@ -1,11 +1,11 @@
 package de.unilandau.unild_zeiterfassung
 
-import android.content.Context
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +13,10 @@ import android.widget.Chronometer
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_watch.view.*
-import java.security.AccessController.getContext
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -23,9 +26,12 @@ class WatchFragment : Fragment() {
     lateinit var chronometer: Chronometer
     lateinit var pauseChronometer: Chronometer
     lateinit var v: View
+    lateinit var timeBegin : LocalDateTime
+    lateinit var timeEnd : LocalDateTime
 
     private val workFragment = WorkFragment()
     private val dayFragment = DayFragment()
+
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -45,7 +51,7 @@ class WatchFragment : Fragment() {
         var firstRun = true
         var Offset: Long = 0
         var pauseOffset: Long = 0
-
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
 
         chronometer = v.findViewById(R.id.chronometer)
@@ -54,15 +60,18 @@ class WatchFragment : Fragment() {
         v.startButton.setOnClickListener {
             if (!running) {
                 if (firstRun) {
-                    val calendar: Calendar = GregorianCalendar(Locale.getDefault())
-                    val year = calendar[Calendar.YEAR]
-                    val month = calendar[Calendar.MONTH]
-                    val day = calendar[Calendar.DAY_OF_MONTH]
-                    val hour = calendar[Calendar.HOUR]
-                    val minute = calendar[Calendar.MINUTE]
-                    v.textViewDate.text = "$hour:$minute Uhr"
-                    v.textViewDateValue.text = "$day.$month.$year"
-                    firstRun = false
+
+                    timeBegin = LocalDateTime.now();
+                    var text = timeBegin.format(formatter)
+                    var parsedDate = LocalDateTime.parse(text,formatter)
+                    Log.d("Zeit:" , text)
+                    Log.d("Zeit:" , parsedDate.toString())
+                    var dateBegin = parsedDate.toLocalTime()
+
+
+                    v.textViewDate.text = dateBegin.toString()
+
+                    v.textViewDateValue.text = text
                 } else {
 
                     pauseChronometer.stop()
@@ -117,7 +126,11 @@ class WatchFragment : Fragment() {
             Offset = SystemClock.elapsedRealtime() - chronometer.base
             pauseOffset = SystemClock.elapsedRealtime() - pauseChronometer.base
 
-            var timeRecording = TimeRecording(1, 2, 3, 4)
+            timeEnd = LocalDateTime.now();
+            Log.d("Gemessene Zeit:", chronometer.base.toString())
+            Log.d("Pause Zeit:", pauseChronometer.base.toString())
+
+           var timeRecording = TimeRecording(timeBegin.toString(),timeEnd.toString(),pauseChronometer.base.toString())
 
             var db = DBHandler(v.context)
 
@@ -138,3 +151,4 @@ class WatchFragment : Fragment() {
 
 
 }
+

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.fragment_container, watchFragment)
         fragmentTransaction.commit()
 
-        // this.deleteDatabase("TimeRecordSystem")
+         this.deleteDatabase("TimeRecordSystem")
 
 
 

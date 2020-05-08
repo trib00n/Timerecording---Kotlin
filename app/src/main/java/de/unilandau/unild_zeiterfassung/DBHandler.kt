@@ -11,7 +11,6 @@ import java.sql.Time
 val DATABASE_NAME = "TimeRecordSystem"
 val TABLE_NAME = "TimeRecord"
 val COL_ID = "id"
-val COL_DATE = "date"
 val COL_BEGIN = "begin"
 val COL_END = "end"
 val COL_PAUSE = "pause"
@@ -23,13 +22,12 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
 
         val createTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_DATE + " INTEGER," +
-                COL_BEGIN + " INTEGER," +
-                COL_END + " INTEGER," +
-                COL_PAUSE + " INTEGER)"
+                COL_BEGIN + " STRING," +
+                COL_END + " DATETIME," +
+                COL_PAUSE + " TIME)"
 
         Log.i(TAG, createTable)
-        Log.i(TAG, "test")
+        Log.i(TAG, "Tabelle erstellt")
         db?.execSQL(createTable)
 
 
@@ -42,7 +40,6 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
     fun insertData(TimeRecording: TimeRecording) {
         val db = this.writableDatabase
         var cv = ContentValues()
-        cv.put(COL_DATE, TimeRecording.date)
         cv.put(COL_BEGIN, TimeRecording.begin)
         cv.put(COL_END, TimeRecording.end)
         cv.put(COL_PAUSE, TimeRecording.pause)
@@ -59,20 +56,40 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
         val db = this.readableDatabase
         val query = "Select * from " + TABLE_NAME
         val result = db.rawQuery(query, null)
+        Log.d("MeinLog:", "Lesen")
+
         if (result.moveToFirst()) {
             do {
                 var timeRecording = TimeRecording()
                 timeRecording.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
-                timeRecording.date = result.getString(result.getColumnIndex(COL_DATE)).toInt()
-                timeRecording.begin = result.getString(result.getColumnIndex(COL_BEGIN)).toInt()
-                timeRecording.end = result.getString(result.getColumnIndex(COL_END)).toInt()
-                timeRecording.pause = result.getString(result.getColumnIndex(COL_PAUSE)).toInt()
+                timeRecording.begin = result.getString(result.getColumnIndex(COL_BEGIN))
+                Log.d("MeinLog:", timeRecording.begin)
+                timeRecording.end = result.getString(result.getColumnIndex(COL_END))
+                timeRecording.pause = result.getString(result.getColumnIndex(COL_PAUSE))
                 list.add(timeRecording)
             } while (result.moveToNext())
         }
         result.close()
         db.close()
         return list
+    }
+
+    fun updateData() {
+
+        val db = this.writableDatabase
+        val query = "Select * from " + TABLE_NAME
+        val result = db.rawQuery(query, null)
+        if (result.moveToFirst()) {
+            do {
+                var cv = ContentValues()
+                cv.put(COL_BEGIN,result.getInt(result.getColumnIndex(COL_BEGIN))+1)
+          //      db.update(TABLE_NAME,cv, COL_ID + "=? AND" + COL_DATE + "+?", arrayOf(result.getString(result.getColumnIndex(COL_ID)), result.getString(result.getColumnIndex(
+          //          COL_DATE))))
+            } while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+
     }
 
 

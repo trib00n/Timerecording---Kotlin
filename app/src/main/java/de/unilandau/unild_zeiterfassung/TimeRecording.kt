@@ -2,13 +2,11 @@ package de.unilandau.unild_zeiterfassung
 
 class TimeRecording{
     var id : Int = 0
-    var date : Int = 0
-    var begin : Int = 0
-    var end : Int = 0
-    var pause : Int = 0
+    var begin : String = ""
+    var end : String = ""
+    var pause : String = ""
 
-    constructor(date:Int,begin:Int,end:Int,pause:Int){
-        this.date = date
+    constructor(begin:String,end:String,pause:String){
         this.begin = begin
         this.end = end
         this.pause = pause
