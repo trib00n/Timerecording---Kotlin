@@ -34,7 +34,7 @@ class WatchFragment : Fragment() {
 
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +60,7 @@ class WatchFragment : Fragment() {
         v.startButton.setOnClickListener {
             if (!running) {
                 if (firstRun) {
-
+                    visibility()
                     timeBegin = LocalDateTime.now();
                     var text = timeBegin.format(formatter)
                     var parsedDate = LocalDateTime.parse(text,formatter)
@@ -78,18 +78,7 @@ class WatchFragment : Fragment() {
                     pauseOffset = SystemClock.elapsedRealtime() - pauseChronometer.base
                     // v.textViewPause.text = "Pausen: $minutes Minuten $pause"
                 }
-                v.startButton.visibility = View.INVISIBLE
-                v.workFragmentButton.visibility = View.INVISIBLE
-                v.chronometer.visibility = View.VISIBLE
-                v.textViewPause.visibility = View.VISIBLE
-                v.textViewDay.visibility = View.VISIBLE
-                v.textViewDateValue.visibility = View.VISIBLE
-                v.textViewText.visibility = View.VISIBLE
-                v.textViewDate.visibility = View.VISIBLE
-                v.pauseButton.visibility = View.VISIBLE
-                v.stopButton.visibility = View.VISIBLE
-                v.textViewPauseText.visibility = View.VISIBLE
-                v.progressBar.visibility = View.VISIBLE
+
                 chronometer.base = SystemClock.elapsedRealtime() - Offset
                 chronometer.start()
                 running = true
@@ -148,7 +137,20 @@ class WatchFragment : Fragment() {
 
         return v
     }
-
+    private fun visibility(){
+        v.startButton.visibility = View.INVISIBLE
+        v.workFragmentButton.visibility = View.INVISIBLE
+        v.chronometer.visibility = View.VISIBLE
+        v.textViewPause.visibility = View.VISIBLE
+        v.textViewDay.visibility = View.VISIBLE
+        v.textViewDateValue.visibility = View.VISIBLE
+        v.textViewText.visibility = View.VISIBLE
+        v.textViewDate.visibility = View.VISIBLE
+        v.pauseButton.visibility = View.VISIBLE
+        v.stopButton.visibility = View.VISIBLE
+        v.textViewPauseText.visibility = View.VISIBLE
+        v.progressBar.visibility = View.VISIBLE
+    }
 
 }
 

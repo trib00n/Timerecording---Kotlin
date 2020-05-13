@@ -22,7 +22,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
 
         val createTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_BEGIN + " STRING," +
+                COL_BEGIN + " DATETIME," +
                 COL_END + " DATETIME," +
                 COL_PAUSE + " TIME)"
 

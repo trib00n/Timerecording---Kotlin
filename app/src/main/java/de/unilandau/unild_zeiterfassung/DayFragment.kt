@@ -32,21 +32,16 @@ class DayFragment : Fragment() {
         var db = DBHandler(v.context)
         var data = db.readAllData()
 
-
         for (i in 0 until data.size){
-
-             beginTime = data.get(i).begin
+            beginTime = data.get(i).begin
         }
-
+       // val formatter2 = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
         var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
-
-
         var parsedDate = LocalDateTime.parse(beginTime,formatter)
-
-        Log.d("MeinLog:", parsedDate.toString())
-
+        Log.d("MeinLog:","Hier")
+       // var formatedDate = LocalDateTime.parse(parsedDate.toString(), formatter2)
+        Log.d("MeinLog:",parsedDate.toString())
         v.editText.append("${parsedDate.dayOfMonth.toString()}.${parsedDate.month.toString()}.${parsedDate.year.toString()}")
-
         v.buttonDelete.setOnClickListener(){
             db.deleteData(2)
         }
