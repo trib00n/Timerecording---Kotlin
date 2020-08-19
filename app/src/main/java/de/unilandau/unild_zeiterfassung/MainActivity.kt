@@ -10,7 +10,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
-//asüdad
+
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MeinLog:"
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.fragment_container, watchFragment)
         fragmentTransaction.commit()
 
-         this.deleteDatabase("TimeRecordSystem")
+       // this.deleteDatabase("TimeRecordSystem")
 
 
 

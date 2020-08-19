@@ -14,7 +14,9 @@ val COL_ID = "id"
 val COL_BEGIN = "begin"
 val COL_END = "end"
 val COL_PAUSE = "pause"
-private val TAG = "MeinLog:"
+val COL_JOB = "job"
+val COL_ANNO = "annotation"
+private val TAG = "DBHandler"
 
 class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
@@ -24,7 +26,9 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_BEGIN + " DATETIME," +
                 COL_END + " DATETIME," +
-                COL_PAUSE + " TIME)"
+                COL_PAUSE + " DATETIME," +
+                COL_JOB + " STRING,"+
+                COL_ANNO + " STRING)"
 
         Log.i(TAG, createTable)
         Log.i(TAG, "Tabelle erstellt")
@@ -43,6 +47,11 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
         cv.put(COL_BEGIN, TimeRecording.begin)
         cv.put(COL_END, TimeRecording.end)
         cv.put(COL_PAUSE, TimeRecording.pause)
+        cv.put(COL_JOB, TimeRecording.job)
+
+        Log.d(TAG, "TimeRecording.job: " + TimeRecording.job)
+        Log.d(TAG, " TimeRecording.annotation: " +  TimeRecording.annotation)
+        cv.put(COL_ANNO, TimeRecording.annotation)
         var result = db.insert(TABLE_NAME, null, cv)
         if (result == -1.toLong()) {
             Toast.makeText(context, "Fehler beim Speichern", Toast.LENGTH_SHORT).show()
@@ -66,6 +75,8 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
                 Log.d("MeinLog:", timeRecording.begin)
                 timeRecording.end = result.getString(result.getColumnIndex(COL_END))
                 timeRecording.pause = result.getString(result.getColumnIndex(COL_PAUSE))
+                timeRecording.job = result.getString(result.getColumnIndex(COL_JOB))
+                timeRecording.annotation = result.getString(result.getColumnIndex(COL_ANNO))
                 list.add(timeRecording)
             } while (result.moveToNext())
         }
@@ -74,26 +85,86 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
         return list
     }
 
-    fun updateData() {
-
-        val db = this.writableDatabase
+    fun readLastData(): MutableList<TimeRecording> {
+        var list: MutableList<TimeRecording> = ArrayList()
+        val db = this.readableDatabase
         val query = "Select * from " + TABLE_NAME
         val result = db.rawQuery(query, null)
-        if (result.moveToFirst()) {
+        Log.d("MeinLog:", "Lesen")
+
+        if (result.moveToLast()) {
             do {
-                var cv = ContentValues()
-                cv.put(COL_BEGIN,result.getInt(result.getColumnIndex(COL_BEGIN))+1)
-          //      db.update(TABLE_NAME,cv, COL_ID + "=? AND" + COL_DATE + "+?", arrayOf(result.getString(result.getColumnIndex(COL_ID)), result.getString(result.getColumnIndex(
-          //          COL_DATE))))
+                var timeRecording = TimeRecording()
+                timeRecording.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
+                timeRecording.begin = result.getString(result.getColumnIndex(COL_BEGIN))
+                Log.d("MeinLog:", timeRecording.begin)
+                timeRecording.end = result.getString(result.getColumnIndex(COL_END))
+                timeRecording.pause = result.getString(result.getColumnIndex(COL_PAUSE))
+                timeRecording.job = result.getString(result.getColumnIndex(COL_JOB))
+                timeRecording.annotation = result.getString(result.getColumnIndex(COL_ANNO))
+                list.add(timeRecording)
             } while (result.moveToNext())
         }
         result.close()
         db.close()
+        return list
+    }
+
+
+
+    fun readDataById(id: String): MutableList<TimeRecording> {
+        var list: MutableList<TimeRecording> = ArrayList()
+        val db = this.readableDatabase
+
+        Log.d(TAG, "")
+
+        val query = "SELECT * FROM $TABLE_NAME WHERE id=$id"
+        val result = db.rawQuery(query, null)
+        Log.d("MeinLog", query.toString())
+
+     if (result.moveToFirst()) {
+         do {
+             var timeRecording = TimeRecording()
+               timeRecording.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
+                timeRecording.begin = result.getString(result.getColumnIndex(COL_BEGIN))
+                Log.d("MeinLog:", timeRecording.begin)
+                timeRecording.end = result.getString(result.getColumnIndex(COL_END))
+                timeRecording.pause = result.getString(result.getColumnIndex(COL_PAUSE))
+                timeRecording.job = result.getString(result.getColumnIndex(COL_JOB))
+                timeRecording.annotation = result.getString(result.getColumnIndex(COL_ANNO))
+                list.add(timeRecording)
+            } while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+        return list
+    }
+
+
+    fun updateData(id: String, begin: String, end: String, pause: String, job: String, annotation: String): Int {
+
+/*
+        val COL_ID = "id"
+        val COL_BEGIN = "begin"
+        val COL_END = "end"
+        val COL_PAUSE = "pause"
+ */
+
+        Log.d(TAG, "updateData!")
+        Log.d(TAG, "job: "+ job)
+        val cv = ContentValues()
+        cv.put(COL_BEGIN, begin)
+        cv.put(COL_END, end)
+        cv.put(COL_PAUSE, pause)
+        cv.put(COL_JOB, job)
+        cv.put(COL_ANNO, annotation)
+        val whereclause = "$COL_ID=?"
+        return this.writableDatabase.update(TABLE_NAME, cv, whereclause, arrayOf(id))
 
     }
 
 
-    fun deleteData(id: Int) {
+    fun deleteData(id: String?) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, COL_ID+"=?", arrayOf(id.toString()))
         db.close()

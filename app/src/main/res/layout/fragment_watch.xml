@@ -89,20 +89,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/ic_watch"
-        android:text="Arbeitstag starten"
+        android:text="Zeitmessung starten"
         android:textAllCaps="false"
         android:textColor="#fff"
         android:textSize="20sp"
         android:textStyle="normal" />
 
     <Button
-        android:id="@+id/workFragmentButton"
+        android:id="@+id/dayFragmentButton"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="65dp"
         android:drawableTop="@drawable/ic_work"
-        android:text="Arbeitstag anzeigen"
+        android:text="Eintrag anlegen"
         android:textAllCaps="false"
         android:textColor="#fff"
         android:textSize="20sp"
