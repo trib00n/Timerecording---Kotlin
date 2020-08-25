@@ -150,7 +150,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
         val db = this.readableDatabase
         var beginTime = LocalDateTime.parse(begin+"T00:00:00.000",parseFormatter)
         var endTime = LocalDateTime.parse(end+"T23:59:59.999",parseFormatter)
-        // val query = "SELECT * FROM $TABLE_NAME WHERE DATE(substr(begin,1,4) ||substr(begin ,6,2)||substr(begin ,9,2)) BETWEEN  DATE(20200821) AND DATE(20200821)"
+
         val query = "SELECT * FROM $TABLE_NAME "
         Log.d("readDataByDate", query.toString())
         val result = db.rawQuery(query, null)
