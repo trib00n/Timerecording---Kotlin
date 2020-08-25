@@ -122,10 +122,15 @@ class DayFragment : Fragment() {
 
             parsedBegin = LocalDateTime.parse(beginTime,parseFormatter)
             parsedEnd = LocalDateTime.parse(endTime,parseFormatter)
+            formattedEndTime = parsedEnd.format(timeFormatter)
+            formattedEndDate = parsedEnd.format(dateFormatter)
+
+            formattedBeginTime = parsedBegin.format(timeFormatter)
+            formattedBeginDate = parsedBegin.format(dateFormatter)
 
 
 
-             v.editTextAcitvity.setText(job)
+            v.editTextAcitvity.setText(job)
 
             v.editTextAnnotation.setText(annotation)
 
@@ -143,11 +148,6 @@ class DayFragment : Fragment() {
             // var diffPauseDummy = Duration.between(parsedPause,parsedDummy)
             //    var diff = diffBeginEnd.plus(diffPauseDummy)
 
-            formattedEndTime = parsedEnd.format(timeFormatter)
-            formattedEndDate = parsedEnd.format(dateFormatter)
-
-            formattedBeginTime = parsedBegin.format(timeFormatter)
-            formattedBeginDate = parsedBegin.format(dateFormatter)
 
             //var formattedPause = parsedPause.format(timeFormatter)
 

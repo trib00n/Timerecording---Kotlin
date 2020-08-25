@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import android.widget.Toast
 import java.sql.Time
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 val DATABASE_NAME = "TimeRecordSystem"
 val TABLE_NAME = "TimeRecord"
@@ -135,6 +137,47 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
                 list.add(timeRecording)
             } while (result.moveToNext())
         }
+        result.close()
+        db.close()
+        return list
+    }
+
+
+    fun readDataByDate(begin: String, end: String): MutableList<TimeRecording> {
+        var list: MutableList<TimeRecording> = ArrayList()
+        var parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
+
+        val db = this.readableDatabase
+        var beginTime = LocalDateTime.parse(begin+"T00:00:00.000",parseFormatter)
+        var endTime = LocalDateTime.parse(end+"T23:59:59.999",parseFormatter)
+        // val query = "SELECT * FROM $TABLE_NAME WHERE DATE(substr(begin,1,4) ||substr(begin ,6,2)||substr(begin ,9,2)) BETWEEN  DATE(20200821) AND DATE(20200821)"
+        val query = "SELECT * FROM $TABLE_NAME "
+        Log.d("readDataByDate", query.toString())
+        val result = db.rawQuery(query, null)
+        Log.d("readDataByDateResult", result.toString())
+
+        if (result.moveToFirst()) {
+            do {
+                var beginStr = result.getString(result.getColumnIndex(COL_BEGIN))
+                var Time = LocalDateTime.parse(beginStr,parseFormatter)
+
+
+                if ((Time.isAfter(beginTime) || Time.isEqual(beginTime)) && (Time.isBefore(endTime) || Time.isEqual(endTime))) {
+                    var timeRecording = TimeRecording()
+                    timeRecording.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
+                    timeRecording.begin = result.getString(result.getColumnIndex(COL_BEGIN))
+                    Log.d("readDataByDate:", "Ja")
+                    Log.d("readDataByDate:", timeRecording.begin)
+                    timeRecording.end = result.getString(result.getColumnIndex(COL_END))
+                    timeRecording.pause = result.getString(result.getColumnIndex(COL_PAUSE))
+                    timeRecording.job = result.getString(result.getColumnIndex(COL_JOB))
+                    timeRecording.annotation = result.getString(result.getColumnIndex(COL_ANNO))
+                    list.add(timeRecording)
+                }
+
+            } while (result.moveToNext())
+        }
+        Log.d("readDataByDate:","Nein")
         result.close()
         db.close()
         return list

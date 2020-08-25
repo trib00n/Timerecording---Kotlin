@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.CheckBox
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ class WorkFragment : Fragment() {
     ): View? {
         v = inflater.inflate(R.layout.fragment_work, container, false)
         var listview = v.findViewById<ListView>(R.id.listView)
+        var checkBox = v.findViewById<CheckBox>(R.id.checkbox)
 
         var list = mutableListOf<Model>()
 
@@ -39,18 +41,11 @@ class WorkFragment : Fragment() {
             dataId = data.get(i).id.toString()
             arraylist.add(dataId)
             var beginTime = data.get(i).begin
-            var endTime = data.get(i).end
-            var pauseTime = data.get(i).pause
             var job = data.get(i).job
-            var annotation = data.get(i).annotation
-
             var parsedBegin = LocalDateTime.parse(beginTime,parseFormatter)
             var formattedBeginDate = parsedBegin.format(dateFormatter)
-
             Log.d(TAG, "ID Lesen:" + dataId)
-
             list.add(Model(job, "Anfangsdatum: " + formattedBeginDate, R.drawable.ic_delete ))
-
             listview.setOnItemClickListener{
                     _:AdapterView<*>, v, position, id ->
 
@@ -59,22 +54,18 @@ class WorkFragment : Fragment() {
                 args.putString("id", arraylist.get(position))
                 dayFragment.arguments = args
 
+
                 val fragmentTransaction = fragmentManager?.beginTransaction()
                 fragmentTransaction?.replace(R.id.fragment_container, dayFragment)
                 fragmentTransaction?.commit()
 
             }
+            listview.adapter = Adapter(v.context, R.layout.row_listview, list )
+
+
 
 
         }
-
-
-
-
-        listview.adapter = Adapter(v.context, R.layout.row_listview, list )
-
-
-        Log.d("MeinLog", "Hier")
 
 
         return v

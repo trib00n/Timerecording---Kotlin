@@ -1,7 +1,8 @@
 package de.unilandau.unild_zeiterfassung
 
 import android.os.Bundle
-import android.util.Log
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +40,8 @@ class MainActivity : AppCompatActivity() {
 
        // this.deleteDatabase("TimeRecordSystem")
 
-
+        val builder = VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
 
         nav_view.setNavigationItemSelectedListener {
             val fragmentTransaction = fragmentManager.beginTransaction()
