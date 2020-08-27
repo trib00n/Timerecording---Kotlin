@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,43 +13,43 @@ import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
 
+@Suppress("NAME_SHADOWING")
 class MainActivity : AppCompatActivity() {
-    private val TAG = "MeinLog:"
 
     lateinit var drawer: DrawerLayout
     lateinit var toolbar: Toolbar
 
     private val fragmentManager = supportFragmentManager
-    private val workFragment = WorkFragment()
+    private val editFragment = EditFragment()
     private val watchFragment = WatchFragment()
-    private val DayFragment = DayFragment()
-    private val settingsFragment = SettingsFragment()
-
+    private val exportFragment = ExportFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
         drawer = findViewById(R.id.draw_layout)
-
         /* Display First Fragment initially */
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, watchFragment)
         fragmentTransaction.commit()
 
+        // Löscht die Datenbank
        // this.deleteDatabase("TimeRecordSystem")
 
+        // Wird für Rechte zur Weitergabe von Anhängen benötigt
         val builder = VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
 
+
+        // Navigation
         nav_view.setNavigationItemSelectedListener {
             val fragmentTransaction = fragmentManager.beginTransaction()
             when (it.itemId) {
                 R.id.nav_work -> {
 
-                    fragmentTransaction.replace(R.id.fragment_container, workFragment)
+                    fragmentTransaction.replace(R.id.fragment_container, editFragment)
                     fragmentTransaction.commit()
                     true
                 }
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_settings -> {
-                    fragmentTransaction.replace(R.id.fragment_container, settingsFragment)
+                    fragmentTransaction.replace(R.id.fragment_container, exportFragment)
                     fragmentTransaction.commit()
                     true
                 }
@@ -84,8 +83,6 @@ class MainActivity : AppCompatActivity() {
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
-
-
 
     }
 

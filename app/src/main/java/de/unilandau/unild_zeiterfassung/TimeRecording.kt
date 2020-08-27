@@ -15,8 +15,5 @@ class TimeRecording{
         this.job = job
         this.annotation = annotation
     }
-    constructor(){
-    }
-
-
+    constructor()
 }
