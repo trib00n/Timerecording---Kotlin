@@ -1,5 +1,7 @@
 package de.unilandau.unild_zeiterfassung
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
@@ -63,7 +65,9 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_help -> {
-                    Toast.makeText(this, "Daten übertragen!", Toast.LENGTH_LONG).show()
+                    val addresses = listOf("support@uni-landau.de").toTypedArray()
+                    val subject = "Supportanfrage Zeiterfassung"
+                    mailtoTypeEmailCreation(addresses,subject)
                     true
                 }
 
@@ -92,5 +96,18 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
+
+    private fun mailtoTypeEmailCreation(
+        addresses: Array<String>, subject: String) {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            val mailto = "mailto:" + addresses.joinToString(",")
+            data = Uri.parse(mailto)
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+        }
+        if (intent.resolveActivity(packageManager) != null) {
+        startActivity(intent)
+    }
+    }
+
 
 }

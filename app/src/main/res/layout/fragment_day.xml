@@ -66,7 +66,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="39dp"
         android:layout_marginTop="30dp"
-        android:text="Details"
+        android:text="Arbeitstag"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -125,7 +125,8 @@
         android:layout_marginTop="393dp"
         android:ems="10"
         android:inputType="date"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:drawableLeft="@drawable/ic_calendar"/>
 
     <TextView
         android:id="@+id/editTextPause"
@@ -137,6 +138,7 @@
         android:layout_marginTop="465dp"
         android:ems="10"
         android:inputType="date"
+        android:drawableLeft="@drawable/ic_watch_black"
         android:textColor="#000000" />
 
     <TextView
@@ -149,6 +151,7 @@
         android:layout_marginEnd="39dp"
         android:ems="10"
         android:inputType="time"
+        android:drawableLeft="@drawable/ic_watch_black"
         android:textColor="#000000" />
 
     <TextView
@@ -174,7 +177,9 @@
         android:layout_marginTop="319dp"
         android:ems="10"
         android:inputType="date"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:drawableLeft="@drawable/ic_calendar"
+        />
 
     <TextView
         android:id="@+id/editTextBeginTime"
@@ -186,7 +191,9 @@
         android:layout_marginEnd="39dp"
         android:ems="10"
         android:inputType="time"
-        android:textColor="#000000" />
+        android:drawableLeft="@drawable/ic_watch_black"
+        android:textColor="#000000"
+        />
 
     <TextView
         android:id="@+id/textViewBeginDate"

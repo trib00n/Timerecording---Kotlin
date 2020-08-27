@@ -48,8 +48,8 @@ class WatchFragment : Fragment() {
         //  val formatedDate = formatter.format(date)
         var running = false
         var firstRun = true
-        var job = "job"
-        var annotation = "annotation"
+        var job = ""
+        var annotation = ""
         var Offset: Long = 0
         var pauseOffset: Long = 0
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")

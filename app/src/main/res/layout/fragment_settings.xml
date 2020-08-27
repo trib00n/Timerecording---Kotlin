@@ -1,15 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-
     android:background="@android:color/white">
-    
+
+
     <TextView
+        android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Einstellungen Fragment"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="75dp"
+        android:text="Exportanzahl"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="108dp" />
+
+    <TextView
+        android:id="@+id/textViewBeginDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="299dp"
+        android:text="Einstellungen" />
+
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="516dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/listDivider" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="290dp"
+        android:layout_marginEnd="-2dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/textViewHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="30dp"
+        android:text="Export"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="69dp"
+        android:background="?android:attr/listDivider" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="135dp"
+        android:layout_marginEnd="-1dp"
+        android:background="?android:attr/listDivider" />
+
+
+    <TextView
+        android:id="@+id/textViewBegin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="145dp"
+        android:text="Ab:"
+
+        />
+
+    <TextView
+        android:id="@+id/editTextBegin"
+        android:layout_width="336dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="165dp"
+        android:layout_marginEnd="38dp"
+        android:ems="10"
+        android:textColor="#000000"
+        android:drawableLeft="@drawable/ic_calendar"
+    />
+
+    <TextView
+        android:id="@+id/textViewEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="218dp"
+        android:text="Anmerkung"
+        />
+
+    <TextView
+        android:id="@+id/editTextEnd"
+        android:layout_width="336dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="239dp"
+        android:layout_marginEnd="38dp"
+        android:ems="10"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:drawableLeft="@drawable/ic_calendar"/>
+
 
     <Button
         android:id="@+id/buttonExport"
@@ -28,7 +165,12 @@
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Einträge nach dem Export löschen?" />
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="319dp"
+        android:text="Einträge nach dem Export löschen?"
+
+
+        />
 
 
 </RelativeLayout>

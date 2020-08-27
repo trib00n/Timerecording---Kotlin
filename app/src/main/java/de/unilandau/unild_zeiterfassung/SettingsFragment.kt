@@ -1,6 +1,7 @@
 package de.unilandau.unild_zeiterfassung
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -23,6 +25,7 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class SettingsFragment : Fragment() {
@@ -40,14 +43,88 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_settings, container, false)
+
+
+
+
         var buttonExport = v.findViewById<Button>(R.id.buttonExport)
         var checkBox = v.findViewById<CheckBox>(R.id.checkBox)
+        var textViewAmount = v.findViewById<TextView>(R.id.textViewAmount)
+
+
+
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+
+        var pickedBeginDate = "2000-01-01"
+        var pickedEndDate = "2100-01-01"
+        v.editTextBegin.text = "01.01.2000"
+        v.editTextEnd.text = "01.01.2100"
+
+        textViewAmount.text = calculateAmount(pickedBeginDate,pickedEndDate)
+
+
         val FILE_NAME = "Zeiterfassung.csv"
         val file = File(v.context.externalCacheDir, FILE_NAME)
         if (file.exists()) {
             file.delete()
         } else {
             file.createNewFile()
+        }
+
+
+
+        v.editTextBegin.setOnClickListener{
+            val dpd = DatePickerDialog(v.context,
+                DatePickerDialog.OnDateSetListener{ view, mYear, mMonth, mDay ->
+                    var realMonth = mMonth+1
+                    var fm = ""
+                    var fd = ""
+                    if (realMonth<10){
+                        fm = "0$realMonth"
+                    } else {
+                        fm = realMonth.toString()
+                    }
+                    if (mDay<10){
+                        fd = "0$mDay"
+                    } else {
+                        fd = mDay.toString()
+                    }
+                    pickedBeginDate = "$mYear-$fm-$fd"
+                    v.editTextBegin.text = "$fd.$fm.$mYear"
+                    v.textViewAmount.text = calculateAmount(pickedBeginDate,pickedEndDate)
+
+                }, year,month,day)
+
+            dpd.show()
+        }
+
+        v.editTextEnd.setOnClickListener{
+            val dpd = DatePickerDialog(v.context,
+                DatePickerDialog.OnDateSetListener{ view, mYear, mMonth, mDay ->
+                    var realMonth = mMonth+1
+                    var fm = ""
+                    var fd = ""
+                    if (realMonth<10){
+                        fm = "0$realMonth"
+                    } else {
+                        fm = realMonth.toString()
+                    }
+                    if (mDay<10){
+                        fd = "0$mDay"
+                    } else {
+                        fd = mDay.toString()
+                    }
+                    pickedEndDate = "$mYear-$fm-$fd"
+                    v.editTextEnd.text = "$fd.$fm.$mYear"
+                    v.textViewAmount.text = calculateAmount(pickedBeginDate,pickedEndDate)
+
+                }, year,month,day)
+
+            dpd.show()
         }
 
 
@@ -62,7 +139,7 @@ class SettingsFragment : Fragment() {
             //  var uri =  FileProvider.getUriForFile(v.context,"de.unilandau.unild_zeiterfassung.fileprovider",file)
             // Datenbank lesen
             var db = DBHandler(v.context)
-            var data = db.readDataByDate("2020-08-01", "2020-08-23")
+            var data = db.readDataByDate(pickedBeginDate,pickedEndDate)
 
             //var data =  db.readAllData()
             if (data != null) {
@@ -156,6 +233,11 @@ class SettingsFragment : Fragment() {
         return "$fh:$fm h"
     }
 
+    private fun calculateAmount(pickedBeginDate:String, pickedEndDate:String) : String {
+        var db = DBHandler(v.context)
+        var data = db.readDataByDate(pickedBeginDate,pickedEndDate)
+        return data.size.toString()
+    }
 
 }
 
