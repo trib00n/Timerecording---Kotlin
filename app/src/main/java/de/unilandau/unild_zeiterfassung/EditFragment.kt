@@ -25,12 +25,10 @@ class EditFragment : Fragment() {
     ): View? {
         v = inflater.inflate(R.layout.fragment_work, container, false)
         val listview = v.findViewById<ListView>(R.id.listView)
-
         val list = mutableListOf<Model>()
 
         val db = DBHandler(v.context)
         val data = db.readAllData()
-
         var dataId : String
         val al=ArrayList<String>()
         for (i in 0 until data.size){

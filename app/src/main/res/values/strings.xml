@@ -6,4 +6,12 @@
     <string name="hilfe">Hilfe</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="pause">Pause</string>
+    <string name="gemessene_zeit">Gemessene Zeit</string>
+    <string name="zeitmessung">Zeitmessung</string>
+    <string name="startzeit">Startzeit</string>
+    <string name="arbeitstag_beenden">Arbeitstag beenden</string>
+    <string name="pause_beginnen">Pause beginnen</string>
+    <string name="eintrag_anlegen">Eintrag anlegen</string>
+    <string name="zeitmessung_starten">Zeitmessung starten</string>
 </resources>

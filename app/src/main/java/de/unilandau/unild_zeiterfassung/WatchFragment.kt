@@ -23,6 +23,8 @@ class WatchFragment : Fragment() {
     lateinit var v: View
     lateinit var timeBegin : LocalDateTime
     lateinit var timeEnd : LocalDateTime
+    lateinit var timeBeginEnd : LocalDateTime
+
 
     private val dayFragment = DayFragment()
 
@@ -37,64 +39,30 @@ class WatchFragment : Fragment() {
 
         v = inflater.inflate(R.layout.fragment_watch, container, false)
 
-        var running = false
-        val firstRun = true
+        var running = true
+        val db = DBHandler(v.context)
         val job = ""
         val annotation = ""
         var offset: Long = 0
         var pauseOffset: Long = 0
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
 
-        chronometer = v.findViewById(R.id.chronometer)
-        pauseChronometer = v.findViewById(R.id.textViewPause)
 
+        chronometer = v.findViewById(R.id.chronometerTime)
+        pauseChronometer = v.findViewById(R.id.chronometerPause)
+
+        /* Anzeige wechselt auf Zeitmessungs, Startzeit wird festgelegt, ChronometerTime wird gestartet */
         v.startButton.setOnClickListener {
-            if (!running) {
-                if (firstRun) {
-                    visibility()
-                    timeBegin = LocalDateTime.now()
-                    val text = timeBegin.format(formatter)
-                    val parsedDate = LocalDateTime.parse(text,formatter)
-                    val dateBegin = parsedDate.toLocalTime()
-                    v.textViewDate.text = dateBegin.toString()
-                    v.textViewDateValue.text = text
-                } else {
-                    pauseChronometer.stop()
-                    pauseOffset = SystemClock.elapsedRealtime() - pauseChronometer.base
-                }
+                visibility()
+                timeBegin = LocalDateTime.now()
+                val ft = timeBegin.format(formatter)
+                val parsedDate = LocalDateTime.parse(ft,formatter)
+                val dateBegin = parsedDate.toLocalTime()
+                v.textViewStartTimeValue.text = dateBegin.toString()
                 chronometer.base = SystemClock.elapsedRealtime() - offset
                 chronometer.start()
-                running = true
-            }
         }
-
-        v.dayFragmentButton.setOnClickListener() {
-            timeBegin =  LocalDateTime.now()
-            timeEnd =  LocalDateTime.now()
-            pauseOffset = 0
-
-            val timeRecording = TimeRecording(timeBegin.toString(),timeEnd.toString(), pauseOffset.toString(), job, annotation)
-
-            val db = DBHandler(v.context)
-
-            db.insertData(timeRecording)
-            val data = db.readLastData()
-            var dataId  = ""
-            for (i in 0 until data.size){
-                dataId = data[i].id.toString()
-            }
-
-            val args = Bundle()
-            args.putString("id",dataId)
-            dayFragment.arguments = args
-
-            val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.fragment_container, dayFragment)
-            fragmentTransaction.commit()
-
-        }
-
-
+        /* Stoppt und startet ChronometerPause */
         v.pauseButton.setOnClickListener {
             if (running) {
                 pauseChronometer.base = SystemClock.elapsedRealtime() - pauseOffset
@@ -110,6 +78,7 @@ class WatchFragment : Fragment() {
             }
         }
 
+        /* Beendet ChronometerTime und ChronometerPause, Legt Endezeit und Pausezeit fest, Schreibt Daten in Datenbank */
         v.stopButton.setOnClickListener {
             chronometer.stop()
             pauseChronometer.stop()
@@ -118,43 +87,53 @@ class WatchFragment : Fragment() {
             }
             timeEnd = LocalDateTime.now()
             val timeRecording = TimeRecording(timeBegin.toString(),timeEnd.toString(), pauseOffset.toString(), job, annotation)
-
-            val db = DBHandler(v.context)
             db.insertData(timeRecording)
-            val data = db.readLastData()
-            var dataId  = ""
-                for (i in 0 until data.size){
-                     dataId = data.get(i).id.toString()
-                }
-
-            val args = Bundle()
-            args.putString("id",dataId)
-            dayFragment.arguments = args
-
-            val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.fragment_container, dayFragment)
-            fragmentTransaction.commit()
-
+            openDayFragment()
         }
 
-
-
+        /* Legt BeginEndezeit auf jetzt und Pausezeit auf 0, Schreibt Daten in Datenbank, Sucht die letzte ID und öffnet damit das DayFragment   */
+        v.createEntryButton.setOnClickListener() {
+            timeBeginEnd =  LocalDateTime.now()
+            pauseOffset = 0
+            val timeRecording = TimeRecording(timeBeginEnd.toString(),timeBeginEnd.toString(), pauseOffset.toString(), job, annotation)
+            db.insertData(timeRecording)
+            openDayFragment()
+        }
 
         return v
     }
+
+
+    /* Button zur Wahl zwischen Zeitmessung und Eintrag hinzufügen werden unsichtbar. Alle anderen Elemente werden Sichtbar für Zeitmessungsfunktion */
     private fun visibility(){
         v.startButton.visibility = View.INVISIBLE
-        v.dayFragmentButton.visibility = View.INVISIBLE
-        v.chronometer.visibility = View.VISIBLE
+        v.createEntryButton.visibility = View.INVISIBLE
+        v.chronometerTime.visibility = View.VISIBLE
+        v.chronometerPause.visibility = View.VISIBLE
         v.textViewPause.visibility = View.VISIBLE
-        v.textViewDay.visibility = View.VISIBLE
-        v.textViewDateValue.visibility = View.VISIBLE
-        v.textViewText.visibility = View.VISIBLE
-        v.textViewDate.visibility = View.VISIBLE
+        v.textViewMeasure.visibility = View.VISIBLE
         v.pauseButton.visibility = View.VISIBLE
         v.stopButton.visibility = View.VISIBLE
-        v.textViewPauseText.visibility = View.VISIBLE
-        v.progressBar.visibility = View.VISIBLE
+        v.divider1.visibility = View.VISIBLE
+        v.divider2.visibility = View.VISIBLE
+    }
+
+    /* Sucht die letzte ID und öffnet damit das DayFragment */
+    private fun openDayFragment() {
+        val db = DBHandler(v.context)
+        val data = db.readLastData()
+        var dataId  = ""
+        for (i in 0 until data.size){
+            dataId = data[i].id.toString()
+        }
+
+        val args = Bundle()
+        args.putString("id",dataId)
+        dayFragment.arguments = args
+
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container, dayFragment)
+        fragmentTransaction.commit()
     }
 
 }

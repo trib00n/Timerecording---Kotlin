@@ -8,13 +8,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import java.io.File
-import java.io.FileInputStream
+import java.nio.file.Path
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -43,12 +42,10 @@ class ExportFragment : Fragment() {
         val checkBox = v.findViewById<CheckBox>(R.id.checkBox)
         val textViewAmount = v.findViewById<TextView>(R.id.textViewAmount)
 
-
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
-
 
         var pickedBeginDate = "2000-01-01"
         var pickedEndDate = "2100-01-01"
@@ -57,38 +54,25 @@ class ExportFragment : Fragment() {
 
         textViewAmount.text = calculateAmount(pickedBeginDate, pickedEndDate)
 
-
-        val FILE_NAME = "Zeiterfassung.csv"
-        val file = File(v.context.externalCacheDir, FILE_NAME)
-        if (file.exists()) {
-            file.delete()
-        } else {
-            file.createNewFile()
-        }
-
-
+        val fileName = "Zeiterfassung.csv"
+        val file = File(v.context.externalCacheDir, fileName)
+        if (file.exists()) file.delete() else file.createNewFile()
+        file.setReadable(true, false)
+        val path = Uri.fromFile(file)
 
         v.editTextBegin.setOnClickListener {
             val dpd = DatePickerDialog(v.context,
                 DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
                     val realMonth = mMonth + 1
-                    val fm = if (realMonth < 10) {
-                        "0$realMonth"
-                    } else {
-                        realMonth.toString()
-                    }
-                    val fd = if (mDay < 10) {
-                        "0$mDay"
-                    } else {
-                        mDay.toString()
-                    }
+                    val fm = addLeadingZeros(realMonth.toString())
+                    val fd = addLeadingZeros(mDay.toString())
+
                     pickedBeginDate = "$mYear-$fm-$fd"
                     v.editTextBegin.text = "$fd.$fm.$mYear"
                     v.textViewAmount.text = calculateAmount(pickedBeginDate, pickedEndDate)
 
                 }, year, month, day
             )
-
             dpd.show()
         }
 
@@ -96,28 +80,17 @@ class ExportFragment : Fragment() {
             val dpd = DatePickerDialog(v.context,
                 DatePickerDialog.OnDateSetListener { _, mYear, mMonth, mDay ->
                     val realMonth = mMonth + 1
-                    val fm = if (realMonth < 10) {
-                        "0$realMonth"
-                    } else {
-                        realMonth.toString()
-                    }
-                    val fd = if (mDay < 10) {
-                        "0$mDay"
-                    } else {
-                        mDay.toString()
-                    }
+                    val fm = addLeadingZeros(realMonth.toString())
+                    val fd = addLeadingZeros(mDay.toString())
+
                     pickedEndDate = "$mYear-$fm-$fd"
                     v.editTextEnd.text = "$fd.$fm.$mYear"
-                    v.textViewAmount.text = calculateAmount(pickedBeginDate, pickedEndDate)
 
+                    v.textViewAmount.text = calculateAmount(pickedBeginDate, pickedEndDate)
                 }, year, month, day
             )
-
             dpd.show()
         }
-
-
-
 
         v.buttonExport.setOnClickListener {
 
@@ -130,86 +103,49 @@ class ExportFragment : Fragment() {
             val data = db.readDataByDate(pickedBeginDate, pickedEndDate)
 
             for (i in 0 until data.size) {
-                val id = data.get(i).id
-                val beginTime = data.get(i).begin
-                val endTime = data.get(i).end
+                val id = data[i].id
+                val beginTime = data[i].begin
+                val endTime = data[i].end
                 val parsedBegin = LocalDateTime.parse(beginTime, parseFormatter)
                 val parsedEnd = LocalDateTime.parse(endTime, parseFormatter)
-                val formattedBeginTime = parsedBegin.format(timeFormatter)
-                val formattedBeginDate = parsedBegin.format(dateFormatter)
-                val formattedEndTime = parsedEnd.format(timeFormatter)
-                val formattedEndDate = parsedEnd.format(dateFormatter)
-
-                val pauseTime = data.get(i).pause
+                val pauseTime = data[i].pause
                 val parsedPause = Duration.ofMillis(pauseTime.toLong())
                 val ltPause = LocalTime.ofNanoOfDay(parsedPause.toNanos())
-                val formattedParsedPause = ltPause.format(timeFormatter)
 
-                val timeWorked = calculateTimeValue(parsedBegin, parsedEnd, parsedPause)
-                val job = data.get(i).job.replace("[\\n\\t ]", "")
-                val annotation = data.get(i).annotation.replace("[\\n\\t ]", "")
-
-                file.appendText(formattedBeginDate.toString())
+                file.appendText( parsedBegin.format(dateFormatter).toString())
                 file.appendText(','.toString())
-                file.appendText(formattedBeginTime.toString())
+                file.appendText( parsedBegin.format(timeFormatter).toString())
                 file.appendText(','.toString())
-                file.appendText(formattedEndDate.toString())
+                file.appendText(parsedEnd.format(dateFormatter).toString())
                 file.appendText(','.toString())
-                file.appendText(formattedEndTime.toString())
+                file.appendText(parsedEnd.format(timeFormatter).toString())
                 file.appendText(','.toString())
-                file.appendText(formattedParsedPause.toString())
+                file.appendText(ltPause.format(timeFormatter).toString())
                 file.appendText(','.toString())
-                file.appendText(timeWorked)
+                file.appendText(calculateTimeValue(parsedBegin, parsedEnd, parsedPause))
                 file.appendText(','.toString())
-                file.appendText(job)
+                file.appendText(data[i].job.replace("[\\n\\t ]", ""))
                 file.appendText(','.toString())
-                file.appendText(annotation)
+                file.appendText(data[i].annotation.replace("[\\n\\t ]", ""))
                 file.appendText('\n'.toString())
 
-                if (checkBox.isChecked) {
-                    db.deleteData(id.toString())
-                }
+                if (checkBox.isChecked) db.deleteData(id.toString())
 
             }
-
-            file.setReadable(true, false)
-            val path = Uri.fromFile(file)
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
-            sendIntent.type = "message/rfc822"
-            sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Zeiterfassung")
-            sendIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                "Sehr geehrte Damen und Herren, \n Anbei finden Sie die Zeiterfassung!\n Mit freundlichen Grüßen,\n Ihr URZ-Team"
-            )
-            sendIntent.setPackage("com.google.android.gm")
-            sendIntent.putExtra(Intent.EXTRA_STREAM, path)
-            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivityForResult(Intent.createChooser(sendIntent, "E-Mail versenden..."), 12)
+            sendMailWithAttachment(path)
+            calculateAmount(pickedBeginDate,pickedEndDate)
         }
 
         return v
     }
 
-    private fun calculateTimeValue(
-        parsedBegin: LocalDateTime,
-        parsedEnd: LocalDateTime,
-        parsedPause: Duration
-    ): String {
+    private fun calculateTimeValue(parsedBegin: LocalDateTime, parsedEnd: LocalDateTime, parsedPause: Duration): String {
         val diff = Duration.between(parsedBegin, parsedEnd)
         val diffMinusPause = diff - parsedPause
-        val hours = diffMinusPause.toHours()
-        val minutes = ((diffMinusPause.seconds % (60 * 60)) / 60)
-        val fh = if (hours in 0..9) {
-            "0$hours"
-        } else {
-            hours.toString()
-        }
-        val fm = if (minutes in 0..9) {
-            "0$minutes"
-        } else {
-            minutes.toString()
-        }
+        val hour = diffMinusPause.toHours()
+        val minute = ((diffMinusPause.seconds % (60 * 60)) / 60)
+        val fh = addLeadingZeros(hour.toString())
+        val fm = addLeadingZeros(minute.toString())
         return "$fh:$fm h"
     }
 
@@ -218,6 +154,26 @@ class ExportFragment : Fragment() {
         val data = db.readDataByDate(pickedBeginDate, pickedEndDate)
         return data.size.toString()
     }
+
+    private fun addLeadingZeros(str: String) : String {
+        return if (str.toInt() in 0..9) "0$str" else str
+    }
+
+    private fun sendMailWithAttachment(path: Uri){
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.type = "message/rfc822"
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Zeiterfassung")
+        sendIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            "Sehr geehrte Damen und Herren, \n Anbei finden Sie die Zeiterfassung!\n Mit freundlichen Grüßen,\n Ihr URZ-Team"
+        )
+        sendIntent.setPackage("com.google.android.gm")
+        sendIntent.putExtra(Intent.EXTRA_STREAM, path)
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivityForResult(Intent.createChooser(sendIntent, "E-Mail versenden..."), 12)
+    }
+
 
 }
 

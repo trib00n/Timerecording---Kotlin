@@ -30,25 +30,27 @@ class MainActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         drawer = findViewById(R.id.draw_layout)
-        /* Display First Fragment initially */
+
+
+        /* Wechselt die Ansicht zum WatchFragment */
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, watchFragment)
         fragmentTransaction.commit()
 
-        // Löscht die Datenbank
-       // this.deleteDatabase("TimeRecordSystem")
+        /* Datenbank beim Start löschen */
+        // this.deleteDatabase("TimeRecordSystem")
 
-        // Wird für Rechte zur Weitergabe von Anhängen benötigt
+
+        /* Rechte zur Weitergabe von Anhängen an GMAIL */
         val builder = VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
 
 
-        // Navigation
+        /*Navigation - Wechselt auf ausgewählten Fragment oder öffnet GMAIL zum senden einer Supportanfrage*/
         nav_view.setNavigationItemSelectedListener {
             val fragmentTransaction = fragmentManager.beginTransaction()
             when (it.itemId) {
                 R.id.nav_work -> {
-
                     fragmentTransaction.replace(R.id.fragment_container, editFragment)
                     fragmentTransaction.commit()
                     true
@@ -74,6 +76,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /* ActionBar öffnen und schließen */
         val toggle = ActionBarDrawerToggle(
             this,
             drawer,
@@ -85,25 +88,27 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
     }
-
-    override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+        /* ActionBar Verhalten bei Zurück */
+        override fun onBackPressed() {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START)
+            } else {
+                super.onBackPressed()
+            }
         }
-    }
 
-    private fun mailtoTypeEmailCreation(
-        addresses: Array<String>, subject: String) {
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
-            val mailto = "mailto:" + addresses.joinToString(",")
-            data = Uri.parse(mailto)
-            putExtra(Intent.EXTRA_SUBJECT, subject)
+
+        /* Öffnen von GMAIL mit eingetragenen To und Subject */
+        private fun mailtoTypeEmailCreation(
+            addresses: Array<String>, subject: String) {
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                val mailto = "mailto:" + addresses.joinToString(",")
+                data = Uri.parse(mailto)
+                putExtra(Intent.EXTRA_SUBJECT, subject)
+            }
+            if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
         }
-        if (intent.resolveActivity(packageManager) != null) {
-        startActivity(intent)
-    }
     }
 
 

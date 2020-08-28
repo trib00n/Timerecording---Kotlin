@@ -1,5 +1,7 @@
 package de.unilandau.unild_zeiterfassung
 
+
+/* Klasse zum schreiben in Datenbank */
 class TimeRecording{
     var id : Int = 0
     var begin : String = ""
