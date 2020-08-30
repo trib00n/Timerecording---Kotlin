@@ -34,6 +34,8 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) = Unit
 
+
+    /* Datenbank mit Füllen */
     fun insertData(TimeRecording: TimeRecording) {
         val db = this.writableDatabase
         val cv = ContentValues()
@@ -51,6 +53,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
         }
     }
 
+    /* Alle Daten in der Datenbank lesen */
     fun readAllData(): MutableList<TimeRecording> {
         val list: MutableList<TimeRecording> = ArrayList()
         val db = this.readableDatabase
@@ -73,6 +76,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
         return list
     }
 
+    /* Letzten Eintrag in der Datenbank lesen */
     fun readLastData(): MutableList<TimeRecording> {
         val list: MutableList<TimeRecording> = ArrayList()
         val db = this.readableDatabase
@@ -96,7 +100,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
     }
 
 
-
+    /* Einträge von Eintrag mit bestimmter ID */
     fun readDataById(id: String): MutableList<TimeRecording> {
         val list: MutableList<TimeRecording> = ArrayList()
         val db = this.readableDatabase
@@ -120,6 +124,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
     }
 
 
+    /* Einträge von Eintrag zwischen Anfangs und Enddatum*/
     fun readDataByDate(begin: String, end: String): MutableList<TimeRecording> {
         val list: MutableList<TimeRecording> = ArrayList()
         val parseFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
@@ -149,7 +154,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
         return list
     }
 
-
+    /* Daten bearbeiten */
     fun updateData(id: String, begin: String, end: String, pause: String, job: String, annotation: String): Int {
         val cv = ContentValues()
         cv.put(COL_BEGIN, begin)
@@ -161,7 +166,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
         return this.writableDatabase.update(TABLE_NAME, cv, whereClause, arrayOf(id))
     }
 
-
+    /* Daten einer ID löschen */
     fun deleteData(id: String?) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME, "$COL_ID=?", arrayOf(id.toString()))

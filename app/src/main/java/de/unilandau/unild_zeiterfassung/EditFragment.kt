@@ -24,30 +24,34 @@ class EditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_work, container, false)
+        /* Listview vorbereiten */
         val listview = v.findViewById<ListView>(R.id.listView)
         val list = mutableListOf<Model>()
 
+        /* Liste um ID in ClickListener der Position zuzuordnen*/
+        val al=ArrayList<String>()
+        /* Alle Daten aus Datenbank lesen */
         val db = DBHandler(v.context)
         val data = db.readAllData()
         var dataId : String
-        val al=ArrayList<String>()
         for (i in 0 until data.size){
 
             dataId = data.get(i).id.toString()
+            // Daten ID der Liste hinzufügen
             al.add(dataId)
             val beginTime = data.get(i).begin
             val job = data.get(i).job
             val parsedBegin = LocalDateTime.parse(beginTime,parseFormatter)
             val formattedBeginDate = parsedBegin.format(dateFormatter)
-
+            // Eintrag der ListView hinzufügen
             list.add(Model(job, "Anfangsdatum: $formattedBeginDate"))
             listview.setOnItemClickListener{
                     _:AdapterView<*>, _, position, _ ->
-
+                // ID des geklickten Items auswählen
                 val args = Bundle()
                 args.putString("id", al[position])
                 dayFragment.arguments = args
-
+                // DayFragment mit ID öffnen
                 val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.fragment_container, dayFragment)
                 fragmentTransaction.commit()
