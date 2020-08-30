@@ -155,7 +155,7 @@ class DayFragment : Fragment() {
         }
         // Öffnet DatePicker Anfangsdatum
         v.editTextBeginDate.setOnClickListener{
-            val dpd = DatePickerDialog(v.context,DatePickerDialog.OnDateSetListener{view, mYear, mMonth, mDay ->
+            val dpd = DatePickerDialog(v.context,DatePickerDialog.OnDateSetListener{ _, mYear, mMonth, mDay ->
                 // Ausgewählter Monat muss um 1 ergänzt werden, da der Picker bei 0 änfangt zu zählen
                 val realMonth = mMonth+1
                 // Hinzufügen von 0 bei Werten zwischen 0-10 da es sonst zu formatierungs Fehlern kommt
@@ -180,7 +180,7 @@ class DayFragment : Fragment() {
 
         // Öffnet DatePicker Endedatum
         v.editTextEndDate.setOnClickListener{
-            val dpd = DatePickerDialog(v.context,DatePickerDialog.OnDateSetListener{view, mYear, mMonth, mDay ->
+            val dpd = DatePickerDialog(v.context,DatePickerDialog.OnDateSetListener{ _, mYear, mMonth, mDay ->
                 // Ausgewählter Monat muss um 1 ergänzt werden, da der Picker bei 0 änfangt zu zählen
                 val realMonth = mMonth+1
                 // Hinzufügen von 0 bei Werten zwischen 0-10 da es sonst zu formatierungs Fehlern kommt
@@ -204,7 +204,7 @@ class DayFragment : Fragment() {
 
         // Öffnet TimePicker Anfangszeit
         v.editTextBeginTime.setOnClickListener {
-            val tsl = TimePickerDialog.OnTimeSetListener(){ view: TimePicker?, hour: Int, minute: Int ->
+            val tsl = TimePickerDialog.OnTimeSetListener(){ _: TimePicker?, hour: Int, minute: Int ->
                 // Ausgewählte Stunden und Minuten werden gelesen
                 c.set(Calendar.HOUR_OF_DAY, hour)
                 c.set(Calendar.MINUTE, minute)
@@ -228,7 +228,7 @@ class DayFragment : Fragment() {
         }
         // Öffnet TimePicker Endzeit
         v.editTextEndTime.setOnClickListener {
-            val tsl = TimePickerDialog.OnTimeSetListener(){ view: TimePicker?, hour: Int, minute: Int ->
+            val tsl = TimePickerDialog.OnTimeSetListener(){ _: TimePicker?, hour: Int, minute: Int ->
                 // Ausgewählte Stunden und Minuten werden gelesen
                 c.set(Calendar.HOUR_OF_DAY, hour)
                 c.set(Calendar.MINUTE, minute)
@@ -253,7 +253,7 @@ class DayFragment : Fragment() {
 
         // Öffnet TimePicker Pausezeit
         v.editTextPause.setOnClickListener {
-            val tsl = TimePickerDialog.OnTimeSetListener(){ view: TimePicker?, hour: Int, minute: Int ->
+            val tsl = TimePickerDialog.OnTimeSetListener(){ _: TimePicker?, hour: Int, minute: Int ->
                 // Ausgewählte Stunden und Minuten werden gelesen
                 c.set(Calendar.HOUR_OF_DAY, hour)
                 c.set(Calendar.MINUTE, minute)

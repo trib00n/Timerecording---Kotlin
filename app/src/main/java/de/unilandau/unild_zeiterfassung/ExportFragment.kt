@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_settings.view.*
+import kotlinx.android.synthetic.main.fragment_export.view.*
 import java.io.File
 import java.nio.file.Path
 import java.time.Duration
@@ -35,7 +35,7 @@ class ExportFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        v = inflater.inflate(R.layout.fragment_settings, container, false)
+        v = inflater.inflate(R.layout.fragment_export, container, false)
 
 
        // var buttonExport = v.findViewById<Button>(R.id.buttonExport)

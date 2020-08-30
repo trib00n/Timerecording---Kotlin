@@ -23,7 +23,7 @@ class EditFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        v = inflater.inflate(R.layout.fragment_work, container, false)
+        v = inflater.inflate(R.layout.fragment_edit, container, false)
         /* Listview vorbereiten */
         val listview = v.findViewById<ListView>(R.id.listView)
         val list = mutableListOf<Model>()

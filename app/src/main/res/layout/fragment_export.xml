@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="161dp"
         android:layout_marginTop="75dp"
-        android:text="Exportanzahl"
+        android:text="@string/exportanzahl2"
         android:textColor="#000000"
         android:textSize="18sp" />
 
@@ -33,7 +33,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="39dp"
         android:layout_marginTop="299dp"
-        android:text="Einstellungen" />
+        android:text="@string/einstellungen" />
 
 
     <View
@@ -68,7 +68,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="39dp"
         android:layout_marginTop="30dp"
-        android:text="Export"
+        android:text="@string/export"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -104,7 +104,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="39dp"
         android:layout_marginTop="145dp"
-        android:text="Ab:"
+        android:text="@string/ab"
 
         />
 
@@ -119,8 +119,8 @@
         android:layout_marginEnd="38dp"
         android:ems="10"
         android:textColor="#000000"
-        android:drawableLeft="@drawable/ic_calendar"
-    />
+        android:drawableStart="@drawable/ic_calendar"
+        />
 
     <TextView
         android:id="@+id/textViewEnd"
@@ -130,7 +130,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="39dp"
         android:layout_marginTop="218dp"
-        android:text="Anmerkung"
+        android:text="@string/bis"
         />
 
     <TextView
@@ -143,9 +143,8 @@
         android:layout_marginTop="239dp"
         android:layout_marginEnd="38dp"
         android:ems="10"
-        android:inputType="text"
         android:textColor="#000000"
-        android:drawableLeft="@drawable/ic_calendar"/>
+        android:drawableStart="@drawable/ic_calendar"/>
 
 
     <Button
@@ -159,7 +158,7 @@
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/colorPrimary"
         android:textColor="#fff"
-        android:text="Export" />
+        android:text="@string/export" />
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -167,7 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="33dp"
         android:layout_marginTop="319dp"
-        android:text="Einträge nach dem Export löschen?"
+        android:text="@string/eintr_ge_nach_dem_export_l_schen"
 
 
         />
