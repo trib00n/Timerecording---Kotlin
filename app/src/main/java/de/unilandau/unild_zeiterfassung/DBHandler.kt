@@ -21,6 +21,7 @@ val COL_ANNO = "annotation"
 
 class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
     @SuppressLint("SQLiteString")
+    // Erstellen der Tabelle
     override fun onCreate(db: SQLiteDatabase?) {
         val createTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -35,7 +36,7 @@ class DBHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) = Unit
 
 
-    /* Datenbank mit Füllen */
+    /* Datenbank mit TimeRecording Objekt füllen */
     fun insertData(TimeRecording: TimeRecording) {
         val db = this.writableDatabase
         val cv = ContentValues()
