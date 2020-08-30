@@ -158,7 +158,7 @@ class DayFragment : Fragment() {
             val dpd = DatePickerDialog(v.context,DatePickerDialog.OnDateSetListener{ _, mYear, mMonth, mDay ->
                 // Ausgewählter Monat muss um 1 ergänzt werden, da der Picker bei 0 änfangt zu zählen
                 val realMonth = mMonth+1
-                // Hinzufügen von 0 bei Werten zwischen 0-10 da es sonst zu formatierungs Fehlern kommt
+                // Hinzufügen von 0 bei Werten zwischen 0-10 da es sonst zu Formatierungsfehlern führt
                 val fm = addLeadingZeros(realMonth.toString())
                 val fd = addLeadingZeros(mDay.toString())
                 // Ausgwähltes Datum für LocalDateTime formatieren
@@ -232,7 +232,7 @@ class DayFragment : Fragment() {
                 // Ausgewählte Stunden und Minuten werden gelesen
                 c.set(Calendar.HOUR_OF_DAY, hour)
                 c.set(Calendar.MINUTE, minute)
-                // Hinzufügen von 0 bei Werten zwischen 0-10 da es sonst zu formatierungs Fehlern kommt
+                // Hinzufügen von 0 bei Werten zwischen 0-10 da es sonst zu Formatierungsfehlern führt
                 val fh = addLeadingZeros(hour.toString())
                 val fm = addLeadingZeros(minute.toString())
                 // Anzeige ausgwähltes Zeit
